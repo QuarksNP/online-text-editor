@@ -1,6 +1,8 @@
-export function moveLoadCover(childElementRef, coverRef){
+export function moveLoadCover(childElementRef: React.RefObject<HTMLElement>, coverRef: React.RefObject<HTMLElement>) {
     const childElement = childElementRef.current
     const cover = coverRef.current
 
-    cover.appendChild(childElement)
+    if(cover != null && childElement != null) {
+        cover.appendChild(childElement)
+    }
 }
