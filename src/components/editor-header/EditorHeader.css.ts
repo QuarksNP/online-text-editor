@@ -2,7 +2,7 @@ import { style, StyleRule } from "@vanilla-extract/css";
 
 export const headerStyle = style({
     position: "relative",
-
+    
     '& input[type=text]': {
         border: 'none',
         outline: 'none',

@@ -1,4 +1,14 @@
-import { createGlobalTheme } from "@vanilla-extract/css";
+import { createGlobalTheme, globalStyle } from "@vanilla-extract/css";
+
+const kanit = 'Kanit, sans-serif';
+
+globalStyle('*', {
+    margin: 0,
+    padding: 0,
+    boxSizing: 'border-box',
+    fontFamily: kanit
+});
+
 
 export const vars = createGlobalTheme(':root', {
     colors: {

@@ -9,6 +9,7 @@ export const headerStyle = style({
     padding: vars.space.medium,
     width: '100%',
     backgroundColor: vars.colors.whiteAlyssum,
+
 })
 
 export const optionStyle = style({
@@ -24,5 +25,5 @@ export const buttonStyle = style({
     backgroundColor: vars.colors.strongBlue,
     color: 'white',
     border: 'none',
-    cursor: 'pointer'
+    cursor: 'pointer',
 })
