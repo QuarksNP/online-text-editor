@@ -1,41 +1,89 @@
+import React from "react";
+
 import { Cover } from "../common/cover/Cover";
-import { LoadCover } from "../common/load-cover/LoadCover";
+import { BtnUploadCover } from "../common/btnUploadCover/BtnUploadCover";
+import { BtnReposition } from "../common/btnReposition/BtnReposition";
+import { BtnRemove } from "../common/btnRemove/BtnRemove";
 
 import { useLoadCover } from "../../hooks/useLoadCover";
-import { useRef, useEffect } from "react";
+import { usePointerCover } from "../../hooks/usePointerCover";
+import { useMoveCover } from "../../hooks/useMoveCover";
+import { useResize } from "../../hooks/useResize";
 
-import { moveLoadCover } from "../../utils/moveCover";
+import { useRef } from "react";
 
-import { headerStyle } from "./EditorHeader.css";
+import * as style from "./EditorHeader.css";
+import {
+  DragVariant,
+  type CoverVariant,
+  type PositionVariant,
+} from "../../types/types";
 
 export const EditorHeader: React.FC = () => {
-  const { handleCover, handleRemove, cover, isCoverLoaded } = useLoadCover();
-
   const loadCoverRef = useRef(null);
   const coverRef = useRef(null);
   const headerRef = useRef(null);
 
-  useEffect(() => {
-    if (isCoverLoaded) {
-      moveLoadCover(loadCoverRef, coverRef);
-    } else {
-      moveLoadCover(loadCoverRef, headerRef);
-    }
-  }, [isCoverLoaded]);
+  const { handleCover, handleRemove, cover, isCoverLoaded, inputRef } =
+    useLoadCover();
+  const {
+    state,
+    handleDown,
+    handleMove,
+    handleUp,
+    handleLeave,
+    handleReposition,
+  } = usePointerCover(coverRef as React.RefObject<HTMLElement>);
+
+  const { isPress, isReposition } = state;
+
+  const coverVariant: CoverVariant = isCoverLoaded
+    ? "changeCover"
+    : "uploadCover";
+  const positionVariant: PositionVariant = isReposition
+    ? "position"
+    : "reposition";
+  const dragVariant: DragVariant = isPress ? "hidden" : "visibility";
+
+  useMoveCover({ isCoverLoaded, loadCoverRef, coverRef, headerRef });
+  const { responsive } = useResize();
 
   return (
-    <header className={headerStyle} ref={headerRef}>
-      <LoadCover
-        isCoverLoaded={isCoverLoaded}
-        handleCover={handleCover}
-        handleRemove={handleRemove}
-        ref={loadCoverRef}
+    <header className={style.headerStyle} ref={headerRef}>
+      <article className={style.articleStyle[coverVariant]} ref={loadCoverRef}>
+        <BtnUploadCover {...{ isReposition, isCoverLoaded, coverVariant }} />
+
+        {isCoverLoaded && (
+          <React.Fragment>
+            <BtnReposition
+              isResponsive={responsive}
+              {...{ handleReposition, isReposition, positionVariant }}
+            />
+            <BtnRemove {...{ isReposition, handleRemove }} />
+          </React.Fragment>
+        )}
+        <input
+          id="cover"
+          type="file"
+          accept=".png, .jpg, .jpeg, .gif"
+          onChange={handleCover}
+          ref={inputRef}
+        />
+      </article>
+      <Cover
+        ref={coverRef}
+        image={cover}
+        isResponsive={responsive}
+        {...{
+          isReposition,
+          isCoverLoaded,
+          dragVariant,
+          handleDown,
+          handleMove,
+          handleUp,
+          handleLeave,
+        }}
       />
-      <Cover image={cover} ref={coverRef} isCoverLoaded={isCoverLoaded} />
     </header>
   );
 };
-
-/*<h1>
-<input type="text" placeholder="New post title here..." />
-</h1>*/

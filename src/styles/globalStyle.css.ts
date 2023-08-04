@@ -20,7 +20,8 @@ export const vars = createGlobalTheme(':root', {
         strongGreen: '#11AEA2',
         lightYellow: '#FEFBED',
         strong_Yellow: '#F6C02E',
-        strongGray: '#545A61'
+        strongGray: '#545A61',
+        opacityBlack: '#000000B3'
     },
 
     space: {
